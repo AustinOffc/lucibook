@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Pencil, Plus, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, BookOpen, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -82,6 +82,11 @@ export default function BookDetailPage() {
             <button type="button" onClick={() => setDeleting(true)} className="btn-ghost p-2 text-red-600 hover:bg-red-50" aria-label="Hapus buku">
               <Trash2 className="h-5 w-5" />
             </button>
+            {(b._count?.pages ?? notes.data?.length ?? 0) > 0 && (
+              <Link href={`/books/${id}/read`} className="btn-outline">
+                <BookOpen className="h-4 w-4" /> Baca
+              </Link>
+            )}
             <button type="button" onClick={newPage} disabled={createNote.isPending} className="btn-primary">
               <Plus className="h-4 w-4" /> Halaman baru
             </button>
