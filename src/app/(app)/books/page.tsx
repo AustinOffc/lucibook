@@ -67,8 +67,9 @@ export default function BooksPage() {
       <ConfirmDialog
         open={!!deleting}
         onClose={() => setDeleting(null)}
-        title="Hapus buku?"
-        message={`Buku "${deleting?.title}" beserta SEMUA halaman di dalamnya akan dihapus permanen.`}
+        title="Pindahkan buku ke Sampah?"
+        message={`Buku "${deleting?.title}" beserta semua halamannya akan masuk Sampah dan dihapus permanen setelah 30 hari. Kamu bisa memulihkannya kapan saja sebelum itu.`}
+        confirmText="Pindahkan"
         onConfirm={() => deleteBook.mutateAsync(deleting!.id)}
       />
     </>

@@ -1,6 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
-import type { Book, Label, Note, NoteFilters } from "./types";
+import type { Book, Label, Note, NoteFilters, Trash } from "./types";
 
 /* ------------------------------ Queries ------------------------------ */
 
@@ -39,6 +39,13 @@ export function useNote(id: string) {
     queryKey: ["note", id],
     enabled: !!id,
     queryFn: async () => (await api.get<{ note: Note }>(`/notes/${id}`)).data.note,
+  });
+}
+
+export function useTrash() {
+  return useQuery({
+    queryKey: ["trash"],
+    queryFn: async () => (await api.get<Trash>("/trash")).data,
   });
 }
 
@@ -98,7 +105,7 @@ export function useDeleteBook() {
   const invalidate = useInvalidate();
   return useMutation({
     mutationFn: async (id: string) => (await api.delete(`/books/${id}`)).data,
-    onSuccess: () => invalidate("books", "notes"),
+    onSuccess: () => invalidate("books", "notes", "labels", "trash"),
   });
 }
 
@@ -139,7 +146,7 @@ export function useDeleteNote() {
     mutationFn: async (id: string) => (await api.delete(`/notes/${id}`)).data,
     onSuccess: (_d, id) => {
       qc.removeQueries({ queryKey: ["note", id] });
-      invalidate("notes", "books", "labels");
+      invalidate("notes", "books", "labels", "trash");
     },
   });
 }
@@ -205,3 +212,19 @@ export function useDeleteLabel() {
     onSuccess: () => invalidate("labels", "notes", "note"),
   });
 }
+
+/* ------------------------------ Sampah ------------------------------- */
+
+function useTrashMutation<V>(fn: (v: V) => Promise<unknown>) {
+  const invalidate = useInvalidate();
+  return useMutation({
+    mutationFn: fn,
+    onSuccess: () => invalidate("trash", "books", "book", "notes", "note", "labels"),
+  });
+}
+
+export const useRestoreBook = () => useTrashMutation((id: string) => api.post(`/trash/books/${id}/restore`));
+export const useRestoreNote = () => useTrashMutation((id: string) => api.post(`/trash/notes/${id}/restore`));
+export const usePurgeBook = () => useTrashMutation((id: string) => api.delete(`/trash/books/${id}`));
+export const usePurgeNote = () => useTrashMutation((id: string) => api.delete(`/trash/notes/${id}`));
+export const useEmptyTrash = () => useTrashMutation<void>(() => api.delete("/trash"));

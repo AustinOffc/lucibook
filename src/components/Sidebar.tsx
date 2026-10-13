@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Globe, LayoutDashboard, LogOut, Settings, Star, Tag, X } from "lucide-react";
+import { BookOpen, Globe, LayoutDashboard, LogOut, Settings, Star, Tag, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
@@ -13,6 +13,7 @@ const NAV = [
   { href: "/books", label: "Buku", icon: BookOpen },
   { href: "/favorites", label: "Favorit", icon: Star },
   { href: "/labels", label: "Label", icon: Tag },
+  { href: "/trash", label: "Sampah", icon: Trash2 },
   { href: "/explore", label: "Explore", icon: Globe },
   { href: "/settings", label: "Pengaturan", icon: Settings },
 ];

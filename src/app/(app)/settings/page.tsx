@@ -4,7 +4,6 @@ import { Globe, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/ui/PageHeader";
-import { API_URL } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { formatDate } from "@/lib/utils";
 
@@ -37,12 +36,6 @@ export default function SettingsPage() {
           <button type="button" onClick={handleLogout} className="btn-outline mt-4">
             <LogOut className="h-4 w-4" /> Keluar
           </button>
-        </section>
-
-        <section className="card p-5">
-          <h2 className="mb-3 font-semibold text-gray-900">Koneksi server</h2>
-          <p className="break-all rounded-xl bg-coksu-50 px-3 py-2 font-mono text-xs text-coksu-900">{API_URL}</p>
-          <p className="mt-2 text-xs text-gray-500">Diatur lewat variabel NEXT_PUBLIC_API_URL saat build.</p>
         </section>
 
         <Link href="/explore" className="btn-outline">

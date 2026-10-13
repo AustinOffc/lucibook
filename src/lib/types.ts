@@ -43,3 +43,25 @@ export interface NoteFilters {
   label_id?: string;
   favorite?: boolean;
 }
+
+export interface TrashBook {
+  id: string;
+  title: string;
+  page_count: number;
+  deleted_at: string;
+  expires_at: string;
+}
+
+export interface TrashNote {
+  id: string;
+  title: string;
+  excerpt: string;
+  book: { id: string; title: string };
+  deleted_at: string;
+  expires_at: string;
+}
+
+export interface Trash {
+  books: TrashBook[];
+  notes: TrashNote[];
+}

@@ -38,7 +38,7 @@ export function getErrorMessage(err: unknown, fallback = "Terjadi kesalahan, cob
   if (axios.isAxiosError(err)) {
     const message = err.response?.data?.message;
     if (typeof message === "string" && message) return message;
-    if (!err.response) return "Tidak dapat terhubung ke server. Periksa NEXT_PUBLIC_API_URL dan tunnel backend.";
+    if (!err.response) return "Tidak dapat terhubung ke server. Periksa koneksi internetmu lalu coba lagi.";
   }
   return fallback;
 }

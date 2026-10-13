@@ -123,8 +123,9 @@ export default function BookDetailPage() {
       <ConfirmDialog
         open={deleting}
         onClose={() => setDeleting(false)}
-        title="Hapus buku?"
-        message={`Buku "${b.title}" beserta semua halamannya akan dihapus permanen.`}
+        title="Pindahkan buku ke Sampah?"
+        message={`Buku "${b.title}" beserta semua halamannya akan masuk Sampah dan dihapus permanen setelah 30 hari. Kamu bisa memulihkannya kapan saja sebelum itu.`}
+        confirmText="Pindahkan"
         onConfirm={async () => {
           await deleteBook.mutateAsync(id);
           router.replace("/books");

@@ -14,3 +14,8 @@ export function timeAgo(iso: string): string {
   if (diff < 7 * 86400) return `${Math.floor(diff / 86400)} hari lalu`;
   return formatDate(iso);
 }
+
+/** Sisa hari sebelum item Sampah dihapus permanen. */
+export function daysLeft(expiresIso: string): number {
+  return Math.max(0, Math.ceil((new Date(expiresIso).getTime() - Date.now()) / 86400000));
+}

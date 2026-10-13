@@ -202,8 +202,9 @@ export default function NoteEditor({ note }: { note: Note }) {
       <ConfirmDialog
         open={confirmDelete}
         onClose={() => setConfirmDelete(false)}
-        title="Hapus catatan?"
-        message={`"${note.title}" akan dihapus permanen.`}
+        title="Pindahkan catatan ke Sampah?"
+        message={`"${note.title}" akan masuk Sampah dan dihapus permanen setelah 30 hari. Kamu bisa memulihkannya kapan saja sebelum itu.`}
+        confirmText="Pindahkan"
         onConfirm={async () => {
           dirty.current = false; // jangan autosave catatan yang dihapus
           await del.mutateAsync(note.id);
