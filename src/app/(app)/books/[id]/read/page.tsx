@@ -121,7 +121,7 @@ function Reader() {
       ) : (
         <>
           {/* Lembar buku */}
-          <article className="relative min-h-[60vh] rounded-2xl border border-pinksoft-200 bg-[#fffbfc] p-6 shadow-md sm:p-10">
+          <article className="relative min-h-[60vh] rounded-2xl border border-pinksoft-200 bg-[#fffcfd] p-6 shadow-md sm:p-10">
             <span className="pointer-events-none absolute inset-y-0 left-0 w-1.5 rounded-l-2xl bg-gradient-to-b from-pinksoft-300 to-pinksoft-500" />
 
             <p className="text-xs font-semibold uppercase tracking-widest text-pinksoft-600">{b.title}</p>

@@ -72,26 +72,26 @@
   margin: 0;
 }
 .note-content blockquote {
-  border-left: 4px solid #f5b0c6;
-  background: #fff5f8;
+  border-left: 4px solid #fac8d9;
+  background: #fff7f9;
   border-radius: 0 0.75rem 0.75rem 0;
   padding: 0.5rem 1rem;
-  color: #862a50;
+  color: #9a4262;
 }
 .note-content a {
-  color: #a93564;
+  color: #c2567f;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .note-content code {
-  background: #ffe8ef;
+  background: #ffeef3;
   border-radius: 0.375rem;
   padding: 0.1rem 0.35rem;
   font-size: 0.9em;
 }
 .note-content pre {
-  background: #5c1f38;
-  color: #fff5f8;
+  background: #6e3049;
+  color: #fff7f9;
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
   overflow-x: auto;
@@ -103,7 +103,7 @@
 }
 .note-content hr {
   border: 0;
-  border-top: 1px solid #fbd0de;
+  border-top: 1px solid #fddfe8;
   margin: 1.25rem 0;
 }
 .note-content iframe {
@@ -142,7 +142,7 @@
   pointer-events: none;
 }
 .ProseMirror-selectednode {
-  outline: 2px solid #e46f96;
+  outline: 2px solid #f092b1;
   outline-offset: 2px;
   border-radius: 0.75rem;
 }

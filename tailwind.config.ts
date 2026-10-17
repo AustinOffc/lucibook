@@ -7,16 +7,16 @@ const config: Config = {
       colors: {
         // PinkSoft (pink soft)
         pinksoft: {
-          50: "#FFF5F8",
-          100: "#FFE8EF",
-          200: "#FBD0DE",
-          300: "#F5B0C6",
-          400: "#EE8FAE",
-          500: "#E46F96",
-          600: "#C94675",
-          700: "#A93564",
-          800: "#862A50",
-          900: "#5C1F38",
+          50: "#FFF7F9",
+          100: "#FFEEF3",
+          200: "#FDDFE8",
+          300: "#FAC8D9",
+          400: "#F5ABC4",
+          500: "#F092B1",
+          600: "#E57C9F",
+          700: "#C2567F",
+          800: "#9A4262",
+          900: "#6E3049",
         },
       },
       fontFamily: {
