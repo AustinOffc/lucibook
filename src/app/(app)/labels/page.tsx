@@ -35,11 +35,11 @@ export default function LabelsPage() {
       ) : !labels || labels.length === 0 ? (
         <EmptyState icon={<Tag className="h-6 w-6" />} title="Belum ada label" hint="Buat label seperti “penting”, “ide”, atau “belajar”." action={newButton} />
       ) : (
-        <ul className="card divide-y divide-coksu-100">
+        <ul className="card divide-y divide-pinksoft-100">
           {labels.map((l) => (
             <li key={l.id} className="flex items-center gap-3 px-4 py-3">
               <Link href={`/labels/${l.id}`} className="flex min-w-0 flex-1 items-center gap-3">
-                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-coksu-100 text-coksu-700">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-pinksoft-100 text-pinksoft-700">
                   <Tag className="h-4 w-4" />
                 </span>
                 <span className="min-w-0">

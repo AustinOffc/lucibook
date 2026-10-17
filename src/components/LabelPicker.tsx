@@ -44,7 +44,7 @@ export default function LabelPicker({ note }: { note: Note }) {
           <button
             type="button"
             onClick={() => toggle(l.id)}
-            className="-ml-1.5 rounded-full p-0.5 text-coksu-700 hover:bg-coksu-200"
+            className="-ml-1.5 rounded-full p-0.5 text-pinksoft-700 hover:bg-pinksoft-200"
             aria-label={`Lepas label ${l.name}`}
           >
             <X className="h-3 w-3" />
@@ -59,7 +59,7 @@ export default function LabelPicker({ note }: { note: Note }) {
       {open && (
         <>
           <div className="fixed inset-0 z-20" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-full z-30 mt-2 w-64 rounded-2xl border border-coksu-100 bg-white p-2 shadow-lg">
+          <div className="absolute left-0 top-full z-30 mt-2 w-64 rounded-2xl border border-pinksoft-100 bg-white p-2 shadow-lg">
             <div className="max-h-48 overflow-y-auto">
               {labels.length === 0 && <p className="px-2 py-2 text-xs text-gray-500">Belum ada label. Buat di bawah.</p>}
               {labels.map((l) => {
@@ -70,17 +70,17 @@ export default function LabelPicker({ note }: { note: Note }) {
                     type="button"
                     onClick={() => toggle(l.id)}
                     className={cn(
-                      "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left text-sm hover:bg-coksu-50",
-                      active && "font-semibold text-coksu-800"
+                      "flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-left text-sm hover:bg-pinksoft-50",
+                      active && "font-semibold text-pinksoft-800"
                     )}
                   >
                     <span className="truncate">{l.name}</span>
-                    {active && <Check className="h-4 w-4 text-coksu-600" />}
+                    {active && <Check className="h-4 w-4 text-pinksoft-600" />}
                   </button>
                 );
               })}
             </div>
-            <form onSubmit={addNew} className="mt-1 border-t border-coksu-100 pt-2">
+            <form onSubmit={addNew} className="mt-1 border-t border-pinksoft-100 pt-2">
               <div className="flex gap-1.5">
                 <input
                   className="input py-2"

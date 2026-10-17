@@ -45,8 +45,8 @@ function Btn({
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
       className={cn(
-        "grid h-9 w-9 shrink-0 place-items-center rounded-lg text-gray-600 transition hover:bg-coksu-100 disabled:opacity-40",
-        active && "bg-coksu-200 text-coksu-900"
+        "grid h-9 w-9 shrink-0 place-items-center rounded-lg text-gray-600 transition hover:bg-pinksoft-100 disabled:opacity-40",
+        active && "bg-pinksoft-200 text-pinksoft-900"
       )}
     >
       {children}
@@ -54,7 +54,7 @@ function Btn({
   );
 }
 
-const Sep = () => <span className="mx-1 h-5 w-px shrink-0 bg-coksu-200" />;
+const Sep = () => <span className="mx-1 h-5 w-px shrink-0 bg-pinksoft-200" />;
 
 export default function Toolbar({ editor }: { editor: Editor | null }) {
   const [dialog, setDialog] = useState<"link" | "embed" | null>(null);
@@ -109,7 +109,7 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex items-center gap-0.5 overflow-x-auto rounded-t-2xl border-b border-coksu-100 bg-white/95 px-2 py-1.5 backdrop-blur">
+      <div className="sticky top-0 z-10 flex items-center gap-0.5 overflow-x-auto rounded-t-2xl border-b border-pinksoft-100 bg-white/95 px-2 py-1.5 backdrop-blur">
         <Btn label="Tebal" active={e.isActive("bold")} onClick={() => e.chain().focus().toggleBold().run()}>
           <Bold className={icon} />
         </Btn>

@@ -56,7 +56,7 @@ export default function PublicNotePage() {
       <div className="card p-5 sm:p-8">
         <h1 className="text-3xl font-bold text-gray-900">{note.title}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-500">
-          <span className="font-medium text-coksu-800">@{note.author}</span>
+          <span className="font-medium text-pinksoft-800">@{note.author}</span>
           <span>·</span>
           <span>{formatDate(note.updated_at)}</span>
           <span className="inline-flex items-center gap-1">
@@ -71,7 +71,7 @@ export default function PublicNotePage() {
           </div>
         )}
 
-        <hr className="my-6 border-coksu-100" />
+        <hr className="my-6 border-pinksoft-100" />
 
         {/* Konten sudah disanitasi di server (script/event handler dibuang, iframe hanya host whitelist). */}
         <div className="note-content" dangerouslySetInnerHTML={{ __html: note.content ?? "" }} />

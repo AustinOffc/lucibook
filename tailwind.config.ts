@@ -5,18 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Coksu (cokelat susu)
-        coksu: {
-          50: "#FBF7F1",
-          100: "#F4EBDD",
-          200: "#E9D8BF",
-          300: "#D2B48C",
-          400: "#C8A67A",
-          500: "#C19A6B",
-          600: "#A9814F",
-          700: "#8A6740",
-          800: "#6B5033",
-          900: "#4D3924",
+        // PinkSoft (pink soft)
+        pinksoft: {
+          50: "#FFF5F8",
+          100: "#FFE8EF",
+          200: "#FBD0DE",
+          300: "#F5B0C6",
+          400: "#EE8FAE",
+          500: "#E46F96",
+          600: "#C94675",
+          700: "#A93564",
+          800: "#862A50",
+          900: "#5C1F38",
         },
       },
       fontFamily: {

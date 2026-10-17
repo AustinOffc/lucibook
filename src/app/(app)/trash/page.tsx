@@ -39,7 +39,7 @@ function Row({
   const left = daysLeft(expires);
   return (
     <li className="card flex flex-wrap items-center gap-3 p-4">
-      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-coksu-100 text-coksu-700">{icon}</div>
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-pinksoft-100 text-pinksoft-700">{icon}</div>
       <div className="min-w-0 flex-1">
         <p className="truncate font-semibold text-gray-900">{title}</p>
         <p className="truncate text-xs text-gray-500">{meta}</p>

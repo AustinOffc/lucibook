@@ -23,7 +23,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
   }
 
   return (
-    <header className="flex items-center gap-3 border-b border-coksu-100 bg-white/90 px-4 py-3 backdrop-blur sm:px-6">
+    <header className="flex items-center gap-3 border-b border-pinksoft-100 bg-white/90 px-4 py-3 backdrop-blur sm:px-6">
       <button type="button" onClick={onMenu} className="btn-ghost p-2 lg:hidden" aria-label="Buka menu">
         <Menu className="h-5 w-5" />
       </button>
@@ -51,7 +51,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
 
       <Link
         href="/settings"
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-coksu-200 text-sm font-bold uppercase text-coksu-900"
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-pinksoft-200 text-sm font-bold uppercase text-pinksoft-900"
         aria-label="Pengaturan akun"
       >
         {user?.username.charAt(0)}

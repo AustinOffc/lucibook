@@ -74,7 +74,7 @@ export default function BookDetailPage() {
         actions={
           <>
             <button type="button" onClick={() => toggleFav.mutate(id)} className="btn-ghost p-2" aria-label="Favorit">
-              <Star className={cn("h-5 w-5", b.is_favorite && "fill-coksu-500 text-coksu-500")} />
+              <Star className={cn("h-5 w-5", b.is_favorite && "fill-pinksoft-500 text-pinksoft-500")} />
             </button>
             <button type="button" onClick={() => setEditing(true)} className="btn-ghost p-2" aria-label="Ubah nama">
               <Pencil className="h-5 w-5" />

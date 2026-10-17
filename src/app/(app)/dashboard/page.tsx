@@ -36,7 +36,7 @@ export default function DashboardPage() {
         <section className="mb-8">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-semibold text-gray-900">Buku</h2>
-            <Link href="/books" className="text-sm font-medium text-coksu-700 hover:underline">
+            <Link href="/books" className="text-sm font-medium text-pinksoft-700 hover:underline">
               Lihat semua
             </Link>
           </div>

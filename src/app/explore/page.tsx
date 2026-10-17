@@ -20,7 +20,7 @@ export default function ExplorePage() {
   return (
     <>
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-coksu-900">Explore</h1>
+        <h1 className="text-3xl font-bold text-pinksoft-900">Explore</h1>
         <p className="mt-2 text-gray-500">Catatan yang dibagikan publik oleh pengguna Lucibook.</p>
         <div className="relative mx-auto mt-5 max-w-md">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />

@@ -13,25 +13,25 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coksu-400 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-pinksoft-400 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-primary {
-    @apply btn bg-coksu-600 text-white shadow-sm hover:bg-coksu-700;
+    @apply btn bg-pinksoft-600 text-white shadow-sm hover:bg-pinksoft-700;
   }
   .btn-outline {
-    @apply btn border border-coksu-200 bg-white text-coksu-800 hover:bg-coksu-50;
+    @apply btn border border-pinksoft-200 bg-white text-pinksoft-800 hover:bg-pinksoft-50;
   }
   .btn-ghost {
-    @apply btn text-gray-600 hover:bg-coksu-100;
+    @apply btn text-gray-600 hover:bg-pinksoft-100;
   }
   .btn-danger {
     @apply btn bg-red-600 text-white hover:bg-red-700;
   }
   .input {
-    @apply w-full rounded-xl border border-coksu-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-coksu-400 focus:outline-none focus:ring-2 focus:ring-coksu-200;
+    @apply w-full rounded-xl border border-pinksoft-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-pinksoft-400 focus:outline-none focus:ring-2 focus:ring-pinksoft-200;
   }
   .card {
-    @apply rounded-2xl border border-coksu-100 bg-white shadow-sm;
+    @apply rounded-2xl border border-pinksoft-100 bg-white shadow-sm;
   }
 }
 
@@ -72,26 +72,26 @@
   margin: 0;
 }
 .note-content blockquote {
-  border-left: 4px solid #d2b48c;
-  background: #fbf7f1;
+  border-left: 4px solid #f5b0c6;
+  background: #fff5f8;
   border-radius: 0 0.75rem 0.75rem 0;
   padding: 0.5rem 1rem;
-  color: #6b5033;
+  color: #862a50;
 }
 .note-content a {
-  color: #8a6740;
+  color: #a93564;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .note-content code {
-  background: #f4ebdd;
+  background: #ffe8ef;
   border-radius: 0.375rem;
   padding: 0.1rem 0.35rem;
   font-size: 0.9em;
 }
 .note-content pre {
-  background: #4d3924;
-  color: #fbf7f1;
+  background: #5c1f38;
+  color: #fff5f8;
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
   overflow-x: auto;
@@ -103,7 +103,7 @@
 }
 .note-content hr {
   border: 0;
-  border-top: 1px solid #e9d8bf;
+  border-top: 1px solid #fbd0de;
   margin: 1.25rem 0;
 }
 .note-content iframe {
@@ -142,7 +142,7 @@
   pointer-events: none;
 }
 .ProseMirror-selectednode {
-  outline: 2px solid #c19a6b;
+  outline: 2px solid #e46f96;
   outline-offset: 2px;
   border-radius: 0.75rem;
 }

@@ -20,20 +20,20 @@ export default function BookCard({
 
   return (
     <article className="card group relative p-4 transition hover:-translate-y-0.5 hover:shadow-md">
-      <Link href={`/books/${book.id}`} className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-coksu-400" aria-label={book.title} />
+      <Link href={`/books/${book.id}`} className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-pinksoft-400" aria-label={book.title} />
 
       <div className="flex items-start justify-between">
-        <div className="grid h-11 w-11 place-items-center rounded-xl bg-coksu-100 text-coksu-700">
+        <div className="grid h-11 w-11 place-items-center rounded-xl bg-pinksoft-100 text-pinksoft-700">
           <BookOpen className="h-5 w-5" />
         </div>
         <button
           type="button"
           onClick={() => toggleFav.mutate(book.id)}
           disabled={toggleFav.isPending}
-          className="relative z-10 -m-1.5 rounded-lg p-1.5 hover:bg-coksu-100"
+          className="relative z-10 -m-1.5 rounded-lg p-1.5 hover:bg-pinksoft-100"
           aria-label={book.is_favorite ? "Hapus dari favorit" : "Tambah ke favorit"}
         >
-          <Star className={cn("h-4 w-4", book.is_favorite ? "fill-coksu-500 text-coksu-500" : "text-gray-400")} />
+          <Star className={cn("h-4 w-4", book.is_favorite ? "fill-pinksoft-500 text-pinksoft-500" : "text-gray-400")} />
         </button>
       </div>
 
@@ -41,7 +41,7 @@ export default function BookCard({
       <p className="mt-0.5 text-sm text-gray-500">{count} halaman</p>
 
       {(onEdit || onDelete) && (
-        <div className="relative z-10 mt-3 flex gap-1 border-t border-coksu-100 pt-3">
+        <div className="relative z-10 mt-3 flex gap-1 border-t border-pinksoft-100 pt-3">
           {onEdit && (
             <button type="button" onClick={onEdit} className="btn-ghost px-2.5 py-1.5 text-xs">
               <Pencil className="h-3.5 w-3.5" /> Ubah

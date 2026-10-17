@@ -52,7 +52,7 @@ export function parseEmbedUrl(input: string): ParsedEmbed | null {
       type: "iframe",
       kind: "audio",
       height: 166,
-      src: `https://w.soundcloud.com/player/?url=${target}&color=%23c19a6b&auto_play=false`,
+      src: `https://w.soundcloud.com/player/?url=${target}&color=%23e46f96&auto_play=false`,
     };
   }
 

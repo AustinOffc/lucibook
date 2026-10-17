@@ -121,10 +121,10 @@ function Reader() {
       ) : (
         <>
           {/* Lembar buku */}
-          <article className="relative min-h-[60vh] rounded-2xl border border-coksu-200 bg-[#fffdf9] p-6 shadow-md sm:p-10">
-            <span className="pointer-events-none absolute inset-y-0 left-0 w-1.5 rounded-l-2xl bg-gradient-to-b from-coksu-300 to-coksu-500" />
+          <article className="relative min-h-[60vh] rounded-2xl border border-pinksoft-200 bg-[#fffbfc] p-6 shadow-md sm:p-10">
+            <span className="pointer-events-none absolute inset-y-0 left-0 w-1.5 rounded-l-2xl bg-gradient-to-b from-pinksoft-300 to-pinksoft-500" />
 
-            <p className="text-xs font-semibold uppercase tracking-widest text-coksu-600">{b.title}</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-pinksoft-600">{b.title}</p>
 
             {noteQ.isLoading || !note ? (
               noteQ.isError ? (
@@ -142,7 +142,7 @@ function Reader() {
                   ))}
                 </div>
 
-                <hr className="my-6 border-coksu-100" />
+                <hr className="my-6 border-pinksoft-100" />
 
                 {/* Konten sudah disanitasi di server (sama seperti halaman Explore). */}
                 {note.content ? (
@@ -151,13 +151,13 @@ function Reader() {
                   <p className="text-sm italic text-gray-400">Halaman ini belum ada isinya.</p>
                 )}
 
-                <p className="mt-10 text-center font-serif text-sm text-coksu-600">— {current} —</p>
+                <p className="mt-10 text-center font-serif text-sm text-pinksoft-600">— {current} —</p>
               </>
             )}
           </article>
 
           {/* Navigasi halaman: menempel di bawah layar */}
-          <div className="sticky bottom-0 z-10 -mx-4 mt-4 border-t border-coksu-100 bg-slate-50/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <div className="sticky bottom-0 z-10 -mx-4 mt-4 border-t border-pinksoft-100 bg-slate-50/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
             <p className="mb-2 text-center text-xs text-gray-500">
               Halaman {current} dari {total}
             </p>

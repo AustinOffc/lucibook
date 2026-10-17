@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Spinner({ className }: { className?: string }) {
-  return <Loader2 className={cn("h-5 w-5 animate-spin text-coksu-600", className)} aria-label="Memuat" />;
+  return <Loader2 className={cn("h-5 w-5 animate-spin text-pinksoft-600", className)} aria-label="Memuat" />;
 }
 
 export function FullScreenSpinner() {

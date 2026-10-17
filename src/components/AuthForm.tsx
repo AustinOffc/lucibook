@@ -111,12 +111,12 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
 
       <p className="mt-5 text-center text-sm text-gray-500">
         {isLogin ? "Belum punya akun? " : "Sudah punya akun? "}
-        <Link href={isLogin ? "/register" : "/login"} className="font-semibold text-coksu-700 hover:underline">
+        <Link href={isLogin ? "/register" : "/login"} className="font-semibold text-pinksoft-700 hover:underline">
           {isLogin ? "Daftar" : "Masuk"}
         </Link>
       </p>
       <p className="mt-2 text-center text-sm">
-        <Link href="/explore" className="text-gray-400 hover:text-coksu-700">
+        <Link href="/explore" className="text-gray-400 hover:text-pinksoft-700">
           Jelajahi catatan publik →
         </Link>
       </p>

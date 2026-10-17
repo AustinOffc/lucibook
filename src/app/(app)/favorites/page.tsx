@@ -22,7 +22,7 @@ export default function FavoritesPage() {
     <>
       <PageHeader title="Favorit" description="Catatan dan buku yang kamu bintangi." />
 
-      <div className="mb-5 inline-flex rounded-xl bg-coksu-100 p-1">
+      <div className="mb-5 inline-flex rounded-xl bg-pinksoft-100 p-1">
         {(
           [
             ["notes", "Catatan"],
@@ -35,7 +35,7 @@ export default function FavoritesPage() {
             onClick={() => setTab(key)}
             className={cn(
               "rounded-lg px-4 py-1.5 text-sm font-semibold transition",
-              tab === key ? "bg-white text-coksu-900 shadow-sm" : "text-coksu-700 hover:text-coksu-900"
+              tab === key ? "bg-white text-pinksoft-900 shadow-sm" : "text-pinksoft-700 hover:text-pinksoft-900"
             )}
           >
             {label}

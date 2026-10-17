@@ -21,7 +21,7 @@ export default function NoteCard({
 
   return (
     <article className="card group relative flex flex-col p-4 transition hover:-translate-y-0.5 hover:shadow-md">
-      <Link href={href} className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-coksu-400" aria-label={note.title} />
+      <Link href={href} className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-pinksoft-400" aria-label={note.title} />
 
       <div className="flex items-start justify-between gap-2">
         <h3 className="line-clamp-2 font-semibold text-gray-900">{note.title}</h3>
@@ -30,10 +30,10 @@ export default function NoteCard({
             type="button"
             onClick={() => toggleFav.mutate(note.id)}
             disabled={toggleFav.isPending}
-            className="relative z-10 -m-1.5 shrink-0 rounded-lg p-1.5 hover:bg-coksu-100"
+            className="relative z-10 -m-1.5 shrink-0 rounded-lg p-1.5 hover:bg-pinksoft-100"
             aria-label={note.is_favorite ? "Hapus dari favorit" : "Tambah ke favorit"}
           >
-            <Star className={cn("h-4 w-4", note.is_favorite ? "fill-coksu-500 text-coksu-500" : "text-gray-400")} />
+            <Star className={cn("h-4 w-4", note.is_favorite ? "fill-pinksoft-500 text-pinksoft-500" : "text-gray-400")} />
           </button>
         )}
       </div>
@@ -54,7 +54,7 @@ export default function NoteCard({
         <span className="truncate">{publicMode ? `@${note.author}` : note.book.title}</span>
         <span>·</span>
         <span className="shrink-0">{timeAgo(note.updated_at)}</span>
-        {!publicMode && note.is_public && <Globe className="ml-auto h-3.5 w-3.5 shrink-0 text-coksu-600" aria-label="Publik" />}
+        {!publicMode && note.is_public && <Globe className="ml-auto h-3.5 w-3.5 shrink-0 text-pinksoft-600" aria-label="Publik" />}
       </div>
     </article>
   );

@@ -30,7 +30,7 @@ export default function BookPager({
 }) {
   const items = buildPages(current, total);
   const base =
-    "grid h-9 min-w-9 shrink-0 place-items-center rounded-xl px-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-coksu-400";
+    "grid h-9 min-w-9 shrink-0 place-items-center rounded-xl px-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-pinksoft-400";
 
   return (
     <nav aria-label="Navigasi halaman buku" className="flex items-center justify-center gap-1.5">
@@ -38,7 +38,7 @@ export default function BookPager({
         type="button"
         onClick={() => onChange(current - 1)}
         disabled={current <= 1}
-        className={cn(base, "border border-coksu-200 bg-white text-coksu-800 hover:bg-coksu-50 disabled:cursor-not-allowed disabled:opacity-40")}
+        className={cn(base, "border border-pinksoft-200 bg-white text-pinksoft-800 hover:bg-pinksoft-50 disabled:cursor-not-allowed disabled:opacity-40")}
         aria-label="Halaman sebelumnya"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -56,8 +56,8 @@ export default function BookPager({
               className={cn(
                 base,
                 it === current
-                  ? "bg-coksu-600 text-white shadow-sm"
-                  : "border border-coksu-200 bg-white text-coksu-800 hover:bg-coksu-50"
+                  ? "bg-pinksoft-600 text-white shadow-sm"
+                  : "border border-pinksoft-200 bg-white text-pinksoft-800 hover:bg-pinksoft-50"
               )}
             >
               {it}
@@ -74,7 +74,7 @@ export default function BookPager({
         type="button"
         onClick={() => onChange(current + 1)}
         disabled={current >= total}
-        className={cn(base, "gap-1 bg-coksu-600 px-3 text-white hover:bg-coksu-700 disabled:cursor-not-allowed disabled:opacity-40")}
+        className={cn(base, "gap-1 bg-pinksoft-600 px-3 text-white hover:bg-pinksoft-700 disabled:cursor-not-allowed disabled:opacity-40")}
         aria-label="Halaman berikutnya"
       >
         <span className="hidden sm:inline">Next</span>

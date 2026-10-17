@@ -7,7 +7,7 @@ import Logo from "./Logo";
 export default function PublicHeader() {
   const { user, loading } = useAuth();
   return (
-    <header className="sticky top-0 z-10 border-b border-coksu-100 bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-10 border-b border-pinksoft-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/explore">
           <Logo />

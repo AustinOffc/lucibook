@@ -37,7 +37,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
       {open && <div className="fixed inset-0 z-30 bg-black/30 lg:hidden" onClick={onClose} />}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-coksu-100 bg-white transition-transform duration-200 lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-pinksoft-100 bg-white transition-transform duration-200 lg:static lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -58,7 +58,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
                   href={href}
                   className={cn(
                     "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition",
-                    isActive(href) ? "bg-coksu-100 font-semibold text-coksu-800" : "text-gray-600 hover:bg-coksu-50"
+                    isActive(href) ? "bg-pinksoft-100 font-semibold text-pinksoft-800" : "text-gray-600 hover:bg-pinksoft-50"
                   )}
                 >
                   <Icon className="h-[18px] w-[18px]" />
@@ -78,10 +78,10 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
                       href={`/books/${b.id}`}
                       className={cn(
                         "flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm",
-                        pathname === `/books/${b.id}` ? "bg-coksu-50 font-medium text-coksu-800" : "text-gray-600 hover:bg-coksu-50"
+                        pathname === `/books/${b.id}` ? "bg-pinksoft-50 font-medium text-pinksoft-800" : "text-gray-600 hover:bg-pinksoft-50"
                       )}
                     >
-                      <BookOpen className="h-3.5 w-3.5 shrink-0 text-coksu-500" />
+                      <BookOpen className="h-3.5 w-3.5 shrink-0 text-pinksoft-500" />
                       <span className="truncate">{b.title}</span>
                     </Link>
                   </li>
@@ -100,10 +100,10 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
                       href={`/labels/${l.id}`}
                       className={cn(
                         "flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm",
-                        pathname === `/labels/${l.id}` ? "bg-coksu-50 font-medium text-coksu-800" : "text-gray-600 hover:bg-coksu-50"
+                        pathname === `/labels/${l.id}` ? "bg-pinksoft-50 font-medium text-pinksoft-800" : "text-gray-600 hover:bg-pinksoft-50"
                       )}
                     >
-                      <Tag className="h-3.5 w-3.5 shrink-0 text-coksu-500" />
+                      <Tag className="h-3.5 w-3.5 shrink-0 text-pinksoft-500" />
                       <span className="truncate">{l.name}</span>
                     </Link>
                   </li>
@@ -113,8 +113,8 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
           )}
         </nav>
 
-        <div className="flex items-center gap-3 border-t border-coksu-100 p-4">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-coksu-200 text-sm font-bold uppercase text-coksu-900">
+        <div className="flex items-center gap-3 border-t border-pinksoft-100 p-4">
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-pinksoft-200 text-sm font-bold uppercase text-pinksoft-900">
             {user?.username.charAt(0)}
           </div>
           <p className="min-w-0 flex-1 truncate text-sm font-medium text-gray-800">{user?.username}</p>

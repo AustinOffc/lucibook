@@ -118,13 +118,13 @@ export default function NoteEditor({ note }: { note: Note }) {
             className="btn-ghost p-2"
             aria-label={note.is_favorite ? "Hapus dari favorit" : "Tambah ke favorit"}
           >
-            <Star className={cn("h-5 w-5", note.is_favorite && "fill-coksu-500 text-coksu-500")} />
+            <Star className={cn("h-5 w-5", note.is_favorite && "fill-pinksoft-500 text-pinksoft-500")} />
           </button>
           <button
             type="button"
             onClick={() => togglePublic.mutate(note.id)}
             disabled={togglePublic.isPending}
-            className={cn("btn-ghost px-3 py-2", note.is_public && "bg-coksu-100 text-coksu-800")}
+            className={cn("btn-ghost px-3 py-2", note.is_public && "bg-pinksoft-100 text-pinksoft-800")}
             aria-pressed={note.is_public}
           >
             {note.is_public ? <Globe className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
@@ -175,7 +175,7 @@ export default function NoteEditor({ note }: { note: Note }) {
       </div>
 
       {note.is_public && (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-coksu-50 px-4 py-2.5 text-sm text-coksu-800">
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-pinksoft-50 px-4 py-2.5 text-sm text-pinksoft-800">
           <span className="inline-flex items-center gap-2">
             <Globe className="h-4 w-4" /> Catatan ini tampil di Explore (read-only untuk orang lain).
           </span>
