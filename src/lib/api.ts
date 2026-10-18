@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isLocalError } from "./offline/errors";
 
 export const TOKEN_KEY = "lucibook_token";
 export const UNAUTHORIZED_EVENT = "lucibook:unauthorized";
@@ -35,6 +36,7 @@ api.interceptors.response.use(
 );
 
 export function getErrorMessage(err: unknown, fallback = "Terjadi kesalahan, coba lagi."): string {
+  if (isLocalError(err)) return err.message;
   if (axios.isAxiosError(err)) {
     const message = err.response?.data?.message;
     if (typeof message === "string" && message) return message;

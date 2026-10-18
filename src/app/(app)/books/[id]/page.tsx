@@ -2,7 +2,7 @@
 
 import { ArrowLeft, BookOpen, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import NotesGrid from "@/components/NotesGrid";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
@@ -21,9 +21,10 @@ import {
 } from "@/lib/queries";
 import { useSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
+import { useRouteId } from "@/lib/useRouteId";
 
 export default function BookDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const id = useRouteId("/books/");
   const router = useRouter();
   const { debouncedQ } = useSearch();
   const book = useBook(id);

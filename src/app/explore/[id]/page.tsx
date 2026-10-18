@@ -2,16 +2,16 @@
 
 import { ArrowLeft, BookOpen, Check, Copy, FileX } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 import LabelChip from "@/components/LabelChip";
 import EmptyState from "@/components/ui/EmptyState";
 import { BlockSpinner } from "@/components/ui/Spinner";
 import { usePublicNote } from "@/lib/queries";
 import { formatDate } from "@/lib/utils";
+import { useRouteId } from "@/lib/useRouteId";
 
 export default function PublicNotePage() {
-  const { id } = useParams<{ id: string }>();
+  const id = useRouteId("/explore/");
   const { data: note, isLoading, isError } = usePublicNote(id);
   const [copied, setCopied] = useState(false);
 

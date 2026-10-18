@@ -4,6 +4,7 @@ import { Globe, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PageHeader from "@/components/ui/PageHeader";
+import SyncPanel from "@/components/SyncPanel";
 import { useAuth } from "@/lib/auth";
 import { formatDate } from "@/lib/utils";
 
@@ -12,8 +13,7 @@ export default function SettingsPage() {
   const router = useRouter();
 
   async function handleLogout() {
-    await logout();
-    router.replace("/login");
+    if (await logout()) router.replace("/login");
   }
 
   return (
@@ -37,6 +37,8 @@ export default function SettingsPage() {
             <LogOut className="h-4 w-4" /> Keluar
           </button>
         </section>
+
+        <SyncPanel />
 
         <Link href="/explore" className="btn-outline">
           <Globe className="h-4 w-4" /> Buka Explore

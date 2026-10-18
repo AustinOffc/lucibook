@@ -2,15 +2,15 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import NotesGrid from "@/components/NotesGrid";
 import PageHeader from "@/components/ui/PageHeader";
 import { getErrorMessage } from "@/lib/api";
 import { useLabels, useNotes } from "@/lib/queries";
 import { useSearch } from "@/lib/search";
+import { useRouteId } from "@/lib/useRouteId";
 
 export default function LabelDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const id = useRouteId("/labels/");
   const { debouncedQ } = useSearch();
   const { data: labels } = useLabels();
   const notes = useNotes({ label_id: id, q: debouncedQ });

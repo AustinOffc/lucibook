@@ -28,8 +28,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   async function handleLogout() {
-    await logout();
-    router.replace("/login");
+    if (await logout()) router.replace("/login");
   }
 
   return (

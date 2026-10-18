@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { useSearch } from "@/lib/search";
+import SyncBadge from "./SyncBadge";
 
 /** Halaman yang menampilkan hasil pencarian. Di halaman lain, mengetik akan membawa ke dashboard. */
 function isSearchable(path: string) {
@@ -48,6 +49,8 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
           </button>
         )}
       </div>
+
+      <SyncBadge />
 
       <Link
         href="/settings"

@@ -3,16 +3,16 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Pencil } from "lucide-react";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useRef } from "react";
 import BookPager from "@/components/BookPager";
 import LabelChip from "@/components/LabelChip";
 import EmptyState from "@/components/ui/EmptyState";
 import { BlockSpinner } from "@/components/ui/Spinner";
-import { api, getErrorMessage } from "@/lib/api";
-import { useBook, useNote, useNotes } from "@/lib/queries";
-import type { Note } from "@/lib/types";
+import { getErrorMessage } from "@/lib/api";
+import { noteQueryFn, useBook, useNote, useNotes } from "@/lib/queries";
 import { formatDate } from "@/lib/utils";
+import { useRouteId } from "@/lib/useRouteId";
 
 /**
  * Mode baca (read-only): satu catatan = satu halaman buku.
@@ -20,7 +20,7 @@ import { formatDate } from "@/lib/utils";
  * Nomor halaman disimpan di URL (?p=3) sehingga refresh tetap di halaman yang sama.
  */
 function Reader() {
-  const { id } = useParams<{ id: string }>();
+  const id = useRouteId("/books/");
   const router = useRouter();
   const search = useSearchParams();
   const qc = useQueryClient();
@@ -57,7 +57,7 @@ function Reader() {
     if (!nextId) return;
     qc.prefetchQuery({
       queryKey: ["note", nextId],
-      queryFn: async () => (await api.get<{ note: Note }>(`/notes/${nextId}`)).data.note,
+      queryFn: () => noteQueryFn(nextId),
     });
   }, [nextId, qc]);
 
