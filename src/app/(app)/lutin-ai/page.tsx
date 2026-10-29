@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { History, Image as ImageIcon, ImagePlus, Loader2, Pencil, Plus, Send, Sparkles, Trash2, X } from "lucide-react";
+import { AlertTriangle, History, Image as ImageIcon, ImagePlus, Loader2, Pencil, Plus, Send, Sparkles, Trash2, X } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ChatText from "@/components/lutin/ChatText";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
@@ -12,11 +12,16 @@ import PageHeader from "@/components/ui/PageHeader";
 import { BlockSpinner } from "@/components/ui/Spinner";
 import { getErrorMessage } from "@/lib/api";
 import {
+  DEFAULT_LUTIN_MODEL,
   fetchSession,
   fetchSessions,
+  getLutinModel,
+  isSessionLimitError,
+  LUTIN_MODELS,
   LUTIN_SESSIONS_KEY,
   LutinAttachment,
   LutinMessage,
+  LutinModelId,
   LutinSessionSummary,
   prepareImage,
   removeAllSessions,
@@ -76,6 +81,8 @@ export default function LutinAiPage() {
   const [sending, setSending] = useState(false);
   const [loadingSession, setLoadingSession] = useState(false);
   const [error, setError] = useState("");
+  const [model, setModel] = useState<LutinModelId>(DEFAULT_LUTIN_MODEL);
+  const [limitReached, setLimitReached] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<LutinSessionSummary | null>(null);
   const [renameTarget, setRenameTarget] = useState<LutinSessionSummary | null>(null);
@@ -103,15 +110,28 @@ export default function LutinAiPage() {
     el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
   }, [input]);
 
-  function resetChat() {
+  /** `keepInput` dipakai dari notif batas sesi supaya pesan yang belum terkirim tidak hilang. */
+  function resetChat(keepInput = false) {
     epoch.current++;
     setSessionId(null);
     setMessages([]);
-    setInput("");
-    setImage(null);
+    if (!keepInput) {
+      setInput("");
+      setImage(null);
+    }
     setError("");
+    setLimitReached(false);
     setSending(false);
     setLoadingSession(false);
+    // Chat baru selalu mulai dari model awal (v1.0), kecuali user baru memilih lain di chat yang masih kosong.
+    if (!keepInput) setModel(DEFAULT_LUTIN_MODEL);
+  }
+
+  function pickModel(id: LutinModelId) {
+    if (locked) return;
+    setModel(id);
+    setError("");
+    if (!getLutinModel(id).supportsImage) setImage(null);
   }
 
   async function openSession(id: string) {
@@ -120,12 +140,14 @@ export default function LutinAiPage() {
     setLoadingSession(true);
     setSending(false);
     setError("");
+    setLimitReached(false);
     setInput("");
     setImage(null);
     try {
       const s = await fetchSession(id);
       if (epoch.current !== myEpoch) return;
       setSessionId(s.id);
+      setModel(s.model ?? "v2");
       setMessages(s.messages);
     } catch (err) {
       if (epoch.current !== myEpoch) return;
@@ -140,6 +162,10 @@ export default function LutinAiPage() {
     e.target.value = ""; // supaya file yang sama bisa dipilih lagi
     if (!file) return;
     setError("");
+    if (!getLutinModel(model).supportsImage) {
+      setError("Lutin-AI v1.0 belum mendukung gambar. Pakai Lutin-AI v2.0 untuk kirim gambar.");
+      return;
+    }
     try {
       setImage(await prepareImage(file));
     } catch (err) {
@@ -149,7 +175,7 @@ export default function LutinAiPage() {
 
   async function send() {
     const text = input.trim();
-    if ((!text && !image) || sending || loadingSession) return;
+    if ((!text && !image) || sending || loadingSession || limitReached) return;
     if (typeof navigator !== "undefined" && !navigator.onLine) {
       setError("Lutin-AI butuh koneksi internet. Cek koneksimu dulu ya.");
       return;
@@ -172,7 +198,7 @@ export default function LutinAiPage() {
     setSending(true);
 
     try {
-      const res = await sendChat({ sessionId, message: text, image: img });
+      const res = await sendChat({ sessionId, model, message: text, image: img });
       qc.invalidateQueries({ queryKey: LUTIN_SESSIONS_KEY });
       if (epoch.current !== myEpoch) return;
       setSessionId(res.session.id);
@@ -187,7 +213,12 @@ export default function LutinAiPage() {
       setMessages((prev) => prev.filter((m) => m.id !== optimistic.id));
       setInput(text);
       setImage(img);
-      setError(getErrorMessage(err, "Lutin-AI belum bisa menjawab. Coba lagi ya."));
+      if (isSessionLimitError(err)) {
+        // Server menolak = sesi ini sudah mencapai batas. Minta user membuka chat baru.
+        setLimitReached(true);
+      } else {
+        setError(getErrorMessage(err, "Lutin-AI belum bisa menjawab. Coba lagi ya."));
+      }
     } finally {
       if (epoch.current === myEpoch) setSending(false);
     }
@@ -221,25 +252,61 @@ export default function LutinAiPage() {
   }
 
   const empty = messages.length === 0 && !sending;
+  // Model terkunci begitu chat dimulai (chat lama tidak bisa pindah model).
+  const locked = !!sessionId || messages.length > 0 || sending;
+  const activeModel = getLutinModel(model);
+  const canAttach = activeModel.supportsImage;
 
   return (
     <div className="flex min-h-[calc(100dvh-8.5rem)] flex-col">
       <PageHeader
         title="Lutin-AI"
-        description="Asisten AI buatan Austin. Bisa diajak ngobrol lewat teks dan gambar."
+        description="Asisten AI buatan Austin. Pilih model v1.0 (teks) atau v2.0 (teks + gambar)."
         actions={
           <>
             <button type="button" className="btn-outline" onClick={() => setHistoryOpen(true)}>
               <History className="h-4 w-4" />
               <span className="hidden sm:inline">Riwayat</span>
             </button>
-            <button type="button" className="btn-primary" onClick={resetChat}>
+            <button type="button" className="btn-primary" onClick={() => resetChat()}>
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Chat baru</span>
             </button>
           </>
         }
       />
+
+      <div className="mb-4">
+        <div role="radiogroup" aria-label="Pilih model Lutin-AI" className="grid grid-cols-2 gap-2">
+          {LUTIN_MODELS.map((m) => {
+            const active = m.id === model;
+            return (
+              <button
+                key={m.id}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                disabled={locked && !active}
+                onClick={() => pickModel(m.id)}
+                className={cn(
+                  "rounded-xl border px-3 py-2 text-left transition",
+                  active ? "border-pinksoft-400 bg-pinksoft-50 ring-1 ring-pinksoft-300" : "border-pinksoft-100 bg-white hover:bg-pinksoft-50",
+                  locked && !active && "cursor-not-allowed opacity-50 hover:bg-white"
+                )}
+              >
+                <p className="flex items-center gap-1.5 text-sm font-semibold text-gray-800">
+                  {m.name}
+                  {m.supportsImage ? <ImageIcon className="h-3.5 w-3.5 text-pinksoft-600" aria-label="Mendukung gambar" /> : null}
+                </p>
+                <p className="text-[11px] leading-snug text-gray-500">{m.hint}</p>
+              </button>
+            );
+          })}
+        </div>
+        {locked && !loadingSession && (
+          <p className="mt-1.5 text-[11px] text-gray-400">Model terkunci selama chat berjalan. Klik “Chat baru” untuk ganti model.</p>
+        )}
+      </div>
 
       <div className="flex-1 space-y-4" aria-live="polite">
         {loadingSession ? (
@@ -248,7 +315,11 @@ export default function LutinAiPage() {
           <EmptyState
             icon={<Sparkles className="h-6 w-6" />}
             title="Hai, aku Lutin-AI ✨"
-            hint="Teman ngobrol kamu di Lucibook. Tanya apa aja, atau kirim gambar buat dibahas bareng."
+            hint={
+              canAttach
+                ? "Teman ngobrol kamu di Lucibook. Tanya apa aja, atau kirim gambar buat dibahas bareng."
+                : "Teman ngobrol kamu di Lucibook. Tanya apa aja! Model v1.0 belum mendukung gambar, pilih v2.0 kalau mau kirim gambar."
+            }
             action={
               <div className="flex flex-wrap justify-center gap-2">
                 {SUGGESTIONS.map((s) => (
@@ -292,6 +363,22 @@ export default function LutinAiPage() {
       </div>
 
       <div className="sticky bottom-0 -mb-6 bg-slate-50 pb-5 pt-3">
+        {limitReached && (
+          <div className="mb-2 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-sm text-amber-900" role="alert">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold">Sesi chat ini sudah mencapai batas</p>
+              <p className="mt-0.5 text-xs leading-relaxed">
+                Server menolak balasan karena satu sesi sudah penuh. Buka tab chat baru untuk lanjut ngobrol, pesanmu yang belum terkirim tetap aman.
+              </p>
+              <button type="button" className="btn-primary mt-2 h-9 px-3 text-xs" onClick={() => resetChat(true)}>
+                <Plus className="h-3.5 w-3.5" />
+                Buka chat baru
+              </button>
+            </div>
+          </div>
+        )}
+
         {error && (
           <p className="mb-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
             {error}
@@ -321,8 +408,9 @@ export default function LutinAiPage() {
             type="button"
             className="btn-outline h-11 w-11 shrink-0 p-0"
             onClick={() => fileRef.current?.click()}
-            disabled={sending || loadingSession}
+            disabled={sending || loadingSession || !canAttach}
             aria-label="Lampirkan gambar"
+            title={canAttach ? "Lampirkan gambar" : "Lutin-AI v1.0 tidak mendukung gambar. Pilih v2.0."}
           >
             <ImagePlus className="h-5 w-5" />
           </button>
@@ -330,7 +418,8 @@ export default function LutinAiPage() {
             ref={taRef}
             rows={1}
             className="input max-h-40 min-h-[2.75rem] flex-1 resize-none"
-            placeholder="Ketik pesan ke Lutin-AI…"
+            placeholder={`Ketik pesan ke ${activeModel.name}…`}
+            disabled={limitReached}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
@@ -340,13 +429,15 @@ export default function LutinAiPage() {
             type="button"
             className="btn-primary h-11 w-11 shrink-0 p-0"
             onClick={() => void send()}
-            disabled={sending || loadingSession || (!input.trim() && !image)}
+            disabled={sending || loadingSession || limitReached || (!input.trim() && !image)}
             aria-label="Kirim"
           >
             {sending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
           </button>
         </div>
-        <p className="mt-2 text-center text-[11px] text-gray-400">Lutin-AI bisa keliru. Cek lagi info yang penting ya.</p>
+        <p className="mt-2 text-center text-[11px] text-gray-400">
+          {canAttach ? "Lutin-AI bisa keliru. Cek lagi info yang penting ya." : "Lutin-AI v1.0 tidak mendukung gambar. Lutin-AI bisa keliru, cek lagi info yang penting ya."}
+        </p>
       </div>
 
       <Modal open={historyOpen} onClose={() => setHistoryOpen(false)} title="Riwayat chat">
@@ -366,7 +457,10 @@ export default function LutinAiPage() {
                   className="min-w-0 flex-1 rounded-xl px-3 py-2 text-left hover:bg-pinksoft-50"
                 >
                   <p className="truncate text-sm font-medium text-gray-800">{s.title}</p>
-                  <p className="text-xs text-gray-400">{timeAgo(s.updated_at)}</p>
+                  <p className="text-xs text-gray-400">
+                    {s.model ? `${getLutinModel(s.model).name} · ` : ""}
+                    {timeAgo(s.updated_at)}
+                  </p>
                 </button>
                 <button
                   type="button"
