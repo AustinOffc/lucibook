@@ -7,7 +7,7 @@ const PAGES_CACHE = "lucibook-pages-" + VERSION;
 // Kerangka halaman yang disimpan agar aplikasi bisa dibuka tanpa internet.
 // Rute dinamis memakai placeholder "_" (halaman membaca id dari URL, bukan dari kerangka ini).
 const SHELLS = [
-  "/", "/login", "/register", "/dashboard", "/books", "/favorites", "/labels", "/trash", "/settings", "/explore",
+  "/", "/login", "/register", "/dashboard", "/books", "/favorites", "/labels", "/trash", "/settings", "/explore", "/lutin-ai",
   "/notes/_", "/books/_", "/books/_/read", "/labels/_", "/explore/_",
 ];
 const EXTRA = ["/manifest.webmanifest", "/icon.svg", "/icons/icon-192.png", "/icons/icon-512.png"];
