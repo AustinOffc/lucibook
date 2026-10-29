@@ -11,10 +11,11 @@ import type { User } from "./types";
 interface AuthState {
   user: User | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<void>;
-  register: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<User>;
+  register: (username: string, password: string) => Promise<User>;
   /** Mengembalikan false bila dibatalkan (masih ada perubahan yang belum terkirim). */
   logout: () => Promise<boolean>;
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthState | null>(null);
@@ -28,7 +29,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const adopt = useCallback((u: User) => {
     cacheUser(u);
     setActiveUser(u);
-    setUser((prev) => (prev && prev.id === u.id && prev.username === u.username ? prev : u));
+    setUser((prev) =>
+      prev &&
+      prev.id === u.id &&
+      prev.username === u.username &&
+      prev.name === u.name &&
+      prev.role === u.role &&
+      prev.avatar_url === u.avatar_url
+        ? prev
+        : u
+    );
   }, []);
 
   // Pulihkan sesi dari token yang tersimpan. Saat offline, pakai profil yang tersimpan di perangkat.
@@ -74,11 +84,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [qc]);
 
   const authenticate = useCallback(
-    async (path: "/auth/login" | "/auth/register", username: string, password: string) => {
+    async (path: "/auth/login" | "/auth/register", username: string, password: string): Promise<User> => {
       const { data } = await api.post<{ user: User; token: string }>(path, { username, password });
       localStorage.setItem(TOKEN_KEY, data.token);
       qc.clear();
       adopt(data.user);
+      return data.user;
     },
     [qc, adopt]
   );
@@ -120,7 +131,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return true;
   }, [qc]);
 
-  const value = useMemo(() => ({ user, loading, login, register, logout }), [user, loading, login, register, logout]);
+  const updateUser = useCallback((u: User) => adopt(u), [adopt]);
+
+  const value = useMemo(
+    () => ({ user, loading, login, register, logout, updateUser }),
+    [user, loading, login, register, logout, updateUser]
+  );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

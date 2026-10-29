@@ -9,6 +9,7 @@ import NotesGrid from "@/components/NotesGrid";
 import PageHeader from "@/components/ui/PageHeader";
 import { getErrorMessage } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { displayName } from "@/lib/profile";
 import { useBooks, useNotes } from "@/lib/queries";
 import { useSearch } from "@/lib/search";
 
@@ -23,7 +24,7 @@ export default function DashboardPage() {
   return (
     <>
       <PageHeader
-        title={searching ? `Hasil untuk “${debouncedQ}”` : `Halo, ${user?.username}`}
+        title={searching ? `Hasil untuk “${debouncedQ}”` : `Halo, ${displayName(user)}`}
         description={searching ? `${notes.data?.length ?? 0} catatan ditemukan` : "Semua catatanmu, yang terbaru di atas."}
         actions={
           <button type="button" className="btn-primary" onClick={() => setNewOpen(true)}>

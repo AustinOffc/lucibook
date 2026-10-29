@@ -19,3 +19,22 @@ export function timeAgo(iso: string): string {
 export function daysLeft(expiresIso: string): number {
   return Math.max(0, Math.ceil((new Date(expiresIso).getTime() - Date.now()) / 86400000));
 }
+
+export function formatDateTime(iso: string): string {
+  return new Date(iso).toLocaleString("id-ID", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export function formatUptime(seconds: number): string {
+  const d = Math.floor(seconds / 86400);
+  const h = Math.floor((seconds % 86400) / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  if (d > 0) return `${d} hari ${h} jam`;
+  if (h > 0) return `${h} jam ${m} menit`;
+  return `${m} menit`;
+}

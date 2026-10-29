@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { useSearch } from "@/lib/search";
+import Avatar from "./Avatar";
 import SyncBadge from "./SyncBadge";
 
 /** Halaman yang menampilkan hasil pencarian. Di halaman lain, mengetik akan membawa ke dashboard. */
@@ -52,12 +53,8 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
 
       <SyncBadge />
 
-      <Link
-        href="/settings"
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-pinksoft-200 text-sm font-bold uppercase text-pinksoft-900"
-        aria-label="Pengaturan akun"
-      >
-        {user?.username.charAt(0)}
+      <Link href="/settings" className="shrink-0 rounded-full" aria-label="Pengaturan akun">
+        <Avatar user={user} />
       </Link>
     </header>
   );

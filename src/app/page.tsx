@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if (loading) return;
-    router.replace(user ? "/dashboard" : "/login");
+    router.replace(user ? (user.role === "OWNER" ? "/owner" : "/dashboard") : "/login");
   }, [user, loading, router]);
 
   return <FullScreenSpinner />;

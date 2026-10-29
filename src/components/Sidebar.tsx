@@ -1,11 +1,13 @@
 "use client";
 
-import { BookOpen, Globe, LayoutDashboard, LogOut, Settings, Sparkles, Star, Tag, Trash2, X } from "lucide-react";
+import { BookOpen, Crown, Globe, LayoutDashboard, LogOut, Settings, Sparkles, Star, Tag, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { displayName } from "@/lib/profile";
 import { useBooks, useLabels } from "@/lib/queries";
 import { cn } from "@/lib/utils";
+import Avatar from "./Avatar";
 import Logo from "./Logo";
 
 const NAV = [
@@ -68,6 +70,16 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
             ))}
           </ul>
 
+          {user?.role === "OWNER" && (
+            <Link
+              href="/owner"
+              className="flex items-center gap-3 rounded-xl border border-pinksoft-200 bg-pinksoft-50 px-3 py-2.5 text-sm font-semibold text-pinksoft-800 transition hover:bg-pinksoft-100"
+            >
+              <Crown className="h-[18px] w-[18px]" />
+              Panel Owner
+            </Link>
+          )}
+
           {books.length > 0 && (
             <div>
               <p className="mb-1.5 px-3 text-xs font-semibold uppercase tracking-wide text-gray-400">Buku saya</p>
@@ -114,10 +126,11 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
         </nav>
 
         <div className="flex items-center gap-3 border-t border-pinksoft-100 p-4">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-pinksoft-200 text-sm font-bold uppercase text-pinksoft-900">
-            {user?.username.charAt(0)}
+          <Avatar user={user} />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-gray-800">{displayName(user)}</p>
+            {user?.name && <p className="truncate text-xs text-gray-400">@{user.username}</p>}
           </div>
-          <p className="min-w-0 flex-1 truncate text-sm font-medium text-gray-800">{user?.username}</p>
           <button type="button" onClick={handleLogout} className="btn-ghost p-2" aria-label="Keluar">
             <LogOut className="h-[18px] w-[18px]" />
           </button>

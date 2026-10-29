@@ -20,7 +20,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) router.replace("/dashboard");
+    if (!loading && user) router.replace(user.role === "OWNER" ? "/owner" : "/dashboard");
   }, [loading, user, router]);
 
   async function onSubmit(e: FormEvent) {
@@ -32,9 +32,8 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
     }
     setSubmitting(true);
     try {
-      if (isLogin) await login(username.trim(), password);
-      else await register(username.trim(), password);
-      router.replace("/dashboard");
+      const u = isLogin ? await login(username.trim(), password) : await register(username.trim(), password);
+      router.replace(u.role === "OWNER" ? "/owner" : "/dashboard");
     } catch (err) {
       setError(getErrorMessage(err));
       setSubmitting(false);
@@ -85,7 +84,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          {!isLogin && <p className="mt-1 text-xs text-gray-400">Minimal 6 karakter.</p>}
+          {!isLogin && <p className="mt-1 text-xs text-gray-400">Minimal 8 karakter, kombinasi huruf dan angka.</p>}
         </div>
 
         {!isLogin && (

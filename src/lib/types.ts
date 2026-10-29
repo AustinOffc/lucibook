@@ -1,6 +1,10 @@
 export interface User {
   id: string;
   username: string;
+  name?: string | null;
+  avatar_url?: string | null;
+  /** Peran akun. Hanya untuk tampilan: hak akses selalu dicek server. */
+  role?: "USER" | "OWNER";
   created_at: string;
 }
 

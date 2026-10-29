@@ -4,6 +4,14 @@ import { isLocalError } from "./offline/errors";
 export const TOKEN_KEY = "lucibook_token";
 export const UNAUTHORIZED_EVENT = "lucibook:unauthorized";
 
+export function saveToken(token: string) {
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch {
+    return;
+  }
+}
+
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api").replace(/\/+$/, "");
 
 /**
@@ -28,8 +36,12 @@ api.interceptors.response.use(
     const url: string = error?.config?.url || "";
     const isCredentialCall = url.startsWith("/auth/login") || url.startsWith("/auth/register");
     if (status === 401 && !isCredentialCall && typeof window !== "undefined") {
-      localStorage.removeItem(TOKEN_KEY);
-      window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+      const sent = String(error?.config?.headers?.Authorization ?? "");
+      const current = localStorage.getItem(TOKEN_KEY);
+      if (!current || sent === `Bearer ${current}`) {
+        localStorage.removeItem(TOKEN_KEY);
+        window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+      }
     }
     return Promise.reject(error);
   }
