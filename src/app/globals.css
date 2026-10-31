@@ -36,6 +36,9 @@
 }
 
 /* ---------- Konten catatan (editor + tampilan baca) ---------- */
+.ProseMirror {
+  -webkit-touch-callout: none;
+}
 .note-content {
   line-height: 1.75;
   overflow-wrap: anywhere;

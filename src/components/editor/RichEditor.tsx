@@ -27,6 +27,17 @@ export default function RichEditor({
     immediatelyRender: false, // hindari mismatch hidrasi SSR
     editorProps: {
       attributes: { class: "note-content min-h-[50vh] px-4 py-4 sm:px-6 focus:outline-none" },
+      handleDOMEvents: {
+        // Di layar sentuh, redam menu bawaan browser (Potong/Salin/Tempel/Pilih semua)
+        // yang menutupi toolbar; fungsinya sudah ada di toolbar editor.
+        contextmenu: (_view, event) => {
+          if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+            event.preventDefault();
+            return true;
+          }
+          return false;
+        },
+      },
     },
     onCreate: ({ editor }) => calc(editor),
     onUpdate: ({ editor }) => {

@@ -6,7 +6,9 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
+  ClipboardPaste,
   Code2,
+  Copy,
   Heading1,
   Heading2,
   Heading3,
@@ -21,7 +23,9 @@ import {
   PlayCircle,
   Quote,
   Redo2,
+  Scissors,
   Strikethrough,
+  TextSelect,
   Type,
   Underline as UnderlineIcon,
   Undo2,
@@ -75,10 +79,67 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
+  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
 
   if (!editor) return null;
   const e = editor;
   const icon = "h-[18px] w-[18px]";
+
+  function notify(msg: string) {
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(""), 1800);
+  }
+
+  function selectedText() {
+    const { from, to } = e.state.selection;
+    return e.state.doc.textBetween(from, to, "\n", "\n");
+  }
+
+  function selectAll() {
+    e.chain().focus().selectAll().run();
+  }
+
+  async function copySelection(cut: boolean) {
+    if (e.state.selection.empty) {
+      notify("Pilih teks dulu");
+      return;
+    }
+    // execCommand mempertahankan format; clipboard API jadi cadangan (teks polos).
+    let ok = false;
+    try {
+      ok = document.execCommand(cut ? "cut" : "copy");
+    } catch {
+      ok = false;
+    }
+    if (!ok) {
+      try {
+        await navigator.clipboard.writeText(selectedText());
+        if (cut) e.chain().focus().deleteSelection().run();
+        ok = true;
+      } catch {
+        ok = false;
+      }
+    }
+    notify(ok ? (cut ? "Teks dipotong" : "Teks disalin") : "Gagal mengakses clipboard");
+  }
+
+  async function pasteClipboard() {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) {
+        notify("Clipboard kosong");
+        return;
+      }
+      const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const lines = text.replace(/\r\n?/g, "\n").split("\n");
+      const html = lines.length > 1 ? lines.map((l) => `<p>${esc(l)}</p>`).join("") : esc(lines[0]);
+      e.chain().focus().insertContent(html).run();
+    } catch {
+      notify("Izin tempel ditolak browser");
+    }
+  }
 
   function openDialog(kind: "link" | "embed" | "image") {
     setValue(kind === "link" ? (e.getAttributes("link").href as string) || "" : "");
@@ -152,6 +213,19 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
   return (
     <>
       <div className="sticky top-0 z-10 flex items-center gap-0.5 overflow-x-auto rounded-t-2xl border-b border-pinksoft-100 bg-white/95 px-2 py-1.5 backdrop-blur">
+        <Btn label="Pilih semua" onClick={selectAll}>
+          <TextSelect className={icon} />
+        </Btn>
+        <Btn label="Potong" onClick={() => void copySelection(true)}>
+          <Scissors className={icon} />
+        </Btn>
+        <Btn label="Salin" onClick={() => void copySelection(false)}>
+          <Copy className={icon} />
+        </Btn>
+        <Btn label="Tempel" onClick={() => void pasteClipboard()}>
+          <ClipboardPaste className={icon} />
+        </Btn>
+        <Sep />
         <Btn label="Tebal" active={e.isActive("bold")} onClick={() => e.chain().focus().toggleBold().run()}>
           <Bold className={icon} />
         </Btn>
@@ -224,6 +298,12 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
           <Redo2 className={icon} />
         </Btn>
       </div>
+
+      {toast && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4">
+          <span className="rounded-full bg-gray-900/90 px-4 py-2 text-sm text-white shadow-lg">{toast}</span>
+        </div>
+      )}
 
       <Modal open={dialog !== null} onClose={() => setDialog(null)} title={dialog === "link" ? "Sisipkan tautan" : dialog === "image" ? "Sisipkan gambar" : "Sematkan audio / video"}>
         <form onSubmit={submit} className="space-y-3">
