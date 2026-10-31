@@ -60,6 +60,60 @@
   font-weight: 600;
   margin-top: 1rem;
 }
+.note-content [data-align="center"] {
+  text-align: center;
+}
+.note-content [data-align="right"] {
+  text-align: right;
+}
+.note-content [data-font="serif"] {
+  font-family: Georgia, "Times New Roman", ui-serif, serif;
+}
+.note-content [data-font="mono"] {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.note-content > [data-spacing="tight"] {
+  line-height: 1.35;
+  margin-top: 0.25rem;
+}
+.note-content > [data-spacing="loose"] {
+  line-height: 2.1;
+  margin-top: 1.5rem;
+}
+/* Highlight (nilai warna sama dengan src/lib/editorStyles.ts) */
+.note-content mark {
+  background: #fde047;
+  color: inherit;
+  border-radius: 0.35rem;
+  padding: 0 0.2em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.note-content mark[data-color="orange"] {
+  background: #f9a66c;
+}
+.note-content mark[data-color="yellow"] {
+  background: #fde047;
+}
+.note-content mark[data-color="pink"] {
+  background: #f9a8d4;
+}
+.note-content mark[data-color="green"] {
+  background: #86efac;
+}
+.note-content mark[data-color="blue"] {
+  background: #93c5fd;
+}
+.note-content s {
+  text-decoration: line-through;
+}
+.note-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border-radius: 0.75rem;
+}
 .note-content ul {
   list-style: disc;
   padding-left: 1.5rem;
@@ -138,7 +192,8 @@
 }
 .ProseMirror iframe,
 .ProseMirror audio,
-.ProseMirror video {
+.ProseMirror video,
+.ProseMirror img {
   pointer-events: none;
 }
 .ProseMirror-selectednode {

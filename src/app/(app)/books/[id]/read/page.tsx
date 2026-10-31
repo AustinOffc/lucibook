@@ -1,11 +1,12 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, BookOpen, Pencil } from "lucide-react";
+import { ArrowLeft, BookOpen, Pencil, Share2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import BookPager from "@/components/BookPager";
+import ExportCardModal from "@/components/ExportCardModal";
 import LabelChip from "@/components/LabelChip";
 import EmptyState from "@/components/ui/EmptyState";
 import { BlockSpinner } from "@/components/ui/Spinner";
@@ -40,6 +41,7 @@ function Reader() {
   const meta = pages[current - 1];
   const noteQ = useNote(meta?.id ?? "");
   const note = noteQ.data;
+  const [showExport, setShowExport] = useState(false);
 
   function goTo(p: number) {
     if (p < 1 || p > total || p === current) return;
@@ -101,9 +103,17 @@ function Reader() {
           <span className="max-w-[12rem] truncate">{b.title}</span>
         </Link>
         {meta && (
-          <Link href={`/notes/${meta.id}`} className="btn-outline px-3 py-2">
-            <Pencil className="h-4 w-4" /> Edit halaman ini
-          </Link>
+          <div className="flex items-center gap-2">
+            {note && (
+              <button type="button" onClick={() => setShowExport(true)} className="btn-outline px-3 py-2">
+                <Share2 className="h-4 w-4" /> Bagikan
+              </button>
+            )}
+            <Link href={`/notes/${meta.id}`} className="btn-outline px-3 py-2">
+              <Pencil className="h-4 w-4" /> Edit halaman ini
+            </Link>
+            {note && <ExportCardModal open={showExport} onClose={() => setShowExport(false)} title={note.title} html={note.content ?? ""} />}
+          </div>
         )}
       </div>
 

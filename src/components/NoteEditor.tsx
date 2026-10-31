@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowLeft, Check, CloudOff, Copy, Globe, Loader2, Lock, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, CloudOff, Copy, Globe, Loader2, Lock, Share2, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useBooks, useDeleteNote, useToggleNoteFavorite, useToggleNotePublic, useUpdateNote } from "@/lib/queries";
 import type { Note } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import ExportCardModal from "./ExportCardModal";
 import LabelPicker from "./LabelPicker";
 import RichEditor from "./editor/RichEditor";
 import ConfirmDialog from "./ui/ConfirmDialog";
@@ -30,6 +31,7 @@ export default function NoteEditor({ note }: { note: Note }) {
   const [status, setStatus] = useState<Status>("saved");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showExport, setShowExport] = useState(false);
 
   const latest = useRef({ title, content });
   latest.current = { title, content };
@@ -130,6 +132,9 @@ export default function NoteEditor({ note }: { note: Note }) {
             {note.is_public ? <Globe className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
             {note.is_public ? "Publik" : "Privat"}
           </button>
+          <button type="button" onClick={() => setShowExport(true)} className="btn-ghost p-2" aria-label="Bagikan sebagai gambar atau PDF">
+            <Share2 className="h-5 w-5" />
+          </button>
           <button type="button" onClick={() => setConfirmDelete(true)} className="btn-ghost p-2 text-red-600 hover:bg-red-50" aria-label="Hapus catatan">
             <Trash2 className="h-5 w-5" />
           </button>
@@ -198,6 +203,8 @@ export default function NoteEditor({ note }: { note: Note }) {
           markDirty();
         }}
       />
+
+      <ExportCardModal open={showExport} onClose={() => setShowExport(false)} title={title} html={content} />
 
       <ConfirmDialog
         open={confirmDelete}
