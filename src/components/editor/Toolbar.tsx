@@ -12,6 +12,7 @@ import {
   Heading3,
   Highlighter,
   Image as ImageIcon,
+  ImagePlus,
   Italic,
   Link2,
   List,
@@ -25,7 +26,9 @@ import {
   Underline as UnderlineIcon,
   Undo2,
 } from "lucide-react";
-import { FormEvent, ReactNode, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useRef, useState } from "react";
+import { getErrorMessage } from "@/lib/api";
+import { uploadNoteImage } from "@/lib/uploadImage";
 import { HIGHLIGHT_COLORS } from "@/lib/editorStyles";
 import { parseEmbedUrl } from "@/lib/embed";
 import { cn } from "@/lib/utils";
@@ -68,6 +71,8 @@ const Sep = () => <span className="mx-1 h-5 w-px shrink-0 bg-pinksoft-200" />;
 export default function Toolbar({ editor }: { editor: Editor | null }) {
   const [dialog, setDialog] = useState<"link" | "embed" | "image" | null>(null);
   const [panel, setPanel] = useState<"highlight" | "style" | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
 
@@ -79,6 +84,23 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
     setValue(kind === "link" ? (e.getAttributes("link").href as string) || "" : "");
     setError("");
     setDialog(kind);
+  }
+
+  async function onPickImage(ev: ChangeEvent<HTMLInputElement>) {
+    const file = ev.target.files?.[0];
+    ev.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      const url = await uploadNoteImage(file);
+      e.chain().focus().insertContent([{ type: "imageEmbed", attrs: { src: url, alt: "Gambar" } }, { type: "paragraph" }]).run();
+      setDialog(null);
+    } catch (err) {
+      setError(getErrorMessage(err, "Gagal mengunggah gambar."));
+    } finally {
+      setUploading(false);
+    }
   }
 
   function submit(ev: FormEvent) {
@@ -205,8 +227,23 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
 
       <Modal open={dialog !== null} onClose={() => setDialog(null)} title={dialog === "link" ? "Sisipkan tautan" : dialog === "image" ? "Sisipkan gambar" : "Sematkan audio / video"}>
         <form onSubmit={submit} className="space-y-3">
+          {dialog === "image" && (
+            <>
+              <button type="button" className="btn-primary w-full" disabled={uploading} onClick={() => fileRef.current?.click()}>
+                <ImagePlus className="h-4 w-4" /> {uploading ? "Mengunggah…" : "Pilih dari galeri"}
+              </button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="hidden"
+                onChange={onPickImage}
+              />
+              <p className="text-center text-xs text-gray-400">atau tempel tautan gambar</p>
+            </>
+          )}
           <input
-            autoFocus
+            autoFocus={dialog !== "image"}
             className="input"
             placeholder={
               dialog === "link"
@@ -220,7 +257,7 @@ export default function Toolbar({ editor }: { editor: Editor | null }) {
           />
           {dialog === "link" && <p className="text-xs text-gray-500">Kosongkan lalu simpan untuk menghapus tautan.</p>}
           {dialog === "image" && (
-            <p className="text-xs text-gray-500">Tempel tautan langsung ke gambar (https). Gambar tampil rata tengah dan menyesuaikan lebar layar.</p>
+            <p className="text-xs text-gray-500">Gambar dari galeri diperkecil (maks 1600 px), diperiksa ulang dan ditulis ulang di server, jadi file palsu ditolak. Tautan harus diawali https://.</p>
           )}
           {dialog === "embed" && (
             <p className="text-xs text-gray-500">

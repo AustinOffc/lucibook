@@ -209,6 +209,9 @@ async function remapId(tx: import("./idb").Tx, tmp: string, real: string, kind: 
   }
 }
 
+const FMT_ATTR = /\sdata-(?:align|font|spacing|color)=/g;
+const fmtCount = (html: string) => (html.match(FMT_ATTR) ?? []).length;
+
 /** Terapkan versi catatan dari server ke data lokal (kecuali masih ada perubahan lokal yang menunggu). */
 async function applyServerNote(tx: import("./idb").Tx, sn: ServerNote, currentSeq?: number) {
   const local = await tx.get<LocalNote>("notes", sn.id);
@@ -219,7 +222,12 @@ async function applyServerNote(tx: import("./idb").Tx, sn: ServerNote, currentSe
     await tx.put("notes", { ...local, base_updated_at: sn.updated_at, created_at: sn.created_at });
     return;
   }
-  const content = sn.content ?? "";
+  // Server lama membuang atribut format (rata teks, highlight, font, jarak baris). Jangan timpa isi lokal
+  // yang lebih lengkap dengan versi polos — itulah yang membuat format "kembali ke default".
+  const serverContent = sn.content ?? "";
+  const localContent = sn.content !== undefined ? (await tx.get<{ id: string; content: string }>("contents", sn.id))?.content : undefined;
+  const keepLocal = localContent !== undefined && fmtCount(localContent) > fmtCount(serverContent);
+  const content = keepLocal ? (localContent as string) : serverContent;
   await tx.put("notes", {
     ...local,
     title: sn.title,
@@ -233,7 +241,7 @@ async function applyServerNote(tx: import("./idb").Tx, sn: ServerNote, currentSe
     base_updated_at: sn.updated_at,
     has_content: true,
   } satisfies LocalNote);
-  if (sn.content !== undefined) await tx.put("contents", { id: sn.id, content });
+  if (sn.content !== undefined && !keepLocal) await tx.put("contents", { id: sn.id, content });
 }
 
 async function finish(op: Op, extra?: (tx: import("./idb").Tx) => Promise<void>) {

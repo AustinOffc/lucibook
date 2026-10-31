@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowLeft, Check, CloudOff, Copy, Globe, Loader2, Lock, Share2, Star, Trash2 } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Check, CloudOff, Copy, Globe, Loader2, Lock, Share2, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getServerFeatures } from "@/lib/serverFeatures";
 import { useBooks, useDeleteNote, useToggleNoteFavorite, useToggleNotePublic, useUpdateNote } from "@/lib/queries";
 import type { Note } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ export default function NoteEditor({ note }: { note: Note }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showExport, setShowExport] = useState(false);
+  const [serverOutdated, setServerOutdated] = useState(false);
 
   const latest = useRef({ title, content });
   latest.current = { title, content };
@@ -77,6 +79,17 @@ export default function NoteEditor({ note }: { note: Note }) {
     };
     window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
+  }, []);
+
+  // Backend lama membuang format teks saat menyimpan -> beri tahu, jangan diam-diam.
+  useEffect(() => {
+    let off = false;
+    getServerFeatures().then((f) => {
+      if (!off && f && (!f.rich_format || !f.images)) setServerOutdated(true);
+    });
+    return () => {
+      off = true;
+    };
   }, []);
 
   async function copyLink() {
@@ -178,6 +191,16 @@ export default function NoteEditor({ note }: { note: Note }) {
         </select>
         <LabelPicker note={note} />
       </div>
+
+      {serverOutdated && (
+        <div className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>
+            Server belum diperbarui, jadi rata teks, warna highlight, font, jarak baris, dan unggah gambar belum tersimpan di server (di Explore tampil
+            polos). Perbarui backend lalu restart, kemudian buka catatan ini dan ubah sedikit supaya tersimpan ulang.
+          </span>
+        </div>
+      )}
 
       {note.is_public && (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-pinksoft-50 px-4 py-2.5 text-sm text-pinksoft-800">
